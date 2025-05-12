@@ -34,7 +34,7 @@ const formSteps = [
     ),
   },
   {
-    type: 'radio',
+    type: 'checkbox',
     name: 'fin-ahorro',
     title: '¿Con qué fin ahorras normalmente?',
     options: [
@@ -425,8 +425,8 @@ export default function Survey() {
               transition={{duration: 0.5}}
               className="flex flex-col flex-grow pb-[8rem]"
             >
-              <div className="mx-auto w-full max-w-[56rem] p-8">
-                <div className="relative bg-gray-200 z-10 rounded-full overflow-hidden">
+              <div className="sticky top-0 bg-white mx-auto w-full max-w-[56rem] p-8 z-10">
+                <div className="relative bg-gray-200 rounded-full overflow-hidden">
                   <div className={`h-4 bg-brand-1`} style={{width: `${((formStep + 1) / formSteps.length) * 100}%`}}/>
                 </div>
               </div>
