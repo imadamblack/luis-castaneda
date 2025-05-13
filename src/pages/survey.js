@@ -372,12 +372,12 @@ export default function Survey() {
 
       await fbEvent('Lead', {phone: data.whatsapp, email: data.email});
 
-      if (info.schedulerLink) {
-        const forwardLink = document.createElement('a');
-        forwardLink.href = `${info.schedulerLink}?name=${data.name}&email=${data.email}&phone=${data.whatsapp}`;
-        forwardLink.target = '_blank';
-        forwardLink.click();
-      }
+      // if (info.schedulerLink) {
+      //   const forwardLink = document.createElement('a');
+      //   forwardLink.href = `${info.schedulerLink}?name=${data.name}&email=${data.email}&phone=${data.whatsapp}`;
+      //   forwardLink.target = '_blank';
+      //   forwardLink.click();
+      // }
 
       setShowOutro(true);
     } catch (err) {
@@ -515,7 +515,7 @@ export default function Survey() {
                 <div
                   className={`fixed p-8 bottom-0 inset-x-0 grid grid-cols-1 gap-8 w-full mt-auto bg-white border-t-2 border-gray-200 z-50`}>
                   <a
-                    href="https://notoriovsstudio.pipedrive.com/scheduler/bEE1rxHv/consultoria-gratuita"
+                    href={info.schedulerLink}
                     target="_blank"
                     className="button mt-auto !w-full"
                     onMouseUp={() => router.push('/')}
