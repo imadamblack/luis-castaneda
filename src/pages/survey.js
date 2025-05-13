@@ -15,7 +15,6 @@ import i01 from '../../public/survey/01.png';
 import i02 from '../../public/survey/02.png';
 import i03 from '../../public/survey/03.jpg';
 import portrait from '../../public/survey/portrait.png';
-import i05 from '../../public/landing/05.png';
 
 
 const formSteps = [
@@ -62,20 +61,6 @@ const formSteps = [
   },
   {
     type: 'radio',
-    name: 'experiencia-frustrante',
-    title: '¿Cuál ha sido tu experiencia más frustrante con el ahorro o la inversión?',
-    options: [
-      {value: 'banco-no-crece', label: 'Meterlo al banco y que no creciera nada'},
-      {value: 'app-un-mes', label: 'Intentar con una app y sacarlo al mes'},
-      {value: 'perder-seguro', label: 'Perder dinero en algo “seguro”'},
-      {value: 'sin-constancia', label: 'Nunca lograr constancia'},
-      {value: 'nunca-intentado', label: 'Nunca lo he intentado'},
-    ],
-    cols: 1,
-    inputOptions: {required: true},
-  },
-  {
-    type: 'radio',
     name: 'tienes-ahorro',
     title: '¿Tienes actualmente un ahorro estructurado que crece cada mes?',
     options: [
@@ -98,6 +83,18 @@ const formSteps = [
       {value: 'metales', label: 'Metales como oro y plata'},
       {value: 'bolsa', label: 'Inversión en bolsa'},
       {value: 'otro', label: 'Otro'},
+    ],
+    cols: 1,
+    inputOptions: {required: true},
+  },
+  {
+    type: 'radio',
+    name: 'dinero-extra',
+    title: 'Normalmente, ¿qué haces con tu dinero una vez que cubres tus gastos fijos?',
+    options: [
+      {value: 'invierte', label: 'Lo invierto o lo asigno a objetivos financieros'},
+      {value: 'guarda-sin-claridad', label: 'Trato de guardarlo, pero sin mucha claridad'},
+      {value: 'se-va', label: 'Se me va en gastos no planeados o lo dejo en la cuenta'},
     ],
     cols: 1,
     inputOptions: {required: true},
@@ -131,18 +128,6 @@ const formSteps = [
   },
   {
     type: 'radio',
-    name: 'dinero-extra',
-    title: 'Normalmente, ¿qué haces con tu dinero una vez que cubres tus gastos fijos?',
-    options: [
-      {value: 'invierte', label: 'Lo invierto o lo asigno a objetivos financieros'},
-      {value: 'guarda-sin-claridad', label: 'Trato de guardarlo, pero sin mucha claridad'},
-      {value: 'se-va', label: 'Se me va en gastos no planeados o lo dejo en la cuenta'},
-    ],
-    cols: 1,
-    inputOptions: {required: true},
-  },
-  {
-    type: 'radio',
     name: 'metas-financieras',
     title: '¿Tienes metas financieras específicas a mediano o largo plazo?',
     options: [
@@ -154,6 +139,18 @@ const formSteps = [
     inputOptions: {required: true},
   },
   {
+    type: 'text',
+    name: 'edad',
+    title: '¿Cuántos años tienes?',
+    inputOptions: {required: true},
+  },
+  {
+    type: 'text',
+    name: 'edad-retiro',
+    title: '¿A los cuántos años piensas retirarte?',
+    inputOptions: {required: true},
+  },
+  {
     type: 'radio',
     name: 'conocimiento-inversion',
     title: '¿Cuánto sabes sobre instrumentos de inversión como Allianz, CETES, fondos o seguros?',
@@ -161,6 +158,19 @@ const formSteps = [
       {value: 'conozco', label: 'Conozco y he invertido antes'},
       {value: 'he-escuchado', label: 'He escuchado, pero no sé exactamente cómo funcionan'},
       {value: 'poco', label: 'Sé muy poco o nada'},
+    ],
+    cols: 1,
+    inputOptions: {required: true},
+  },
+  {
+    type: 'radio',
+    name: 'presupuesto',
+    title: '¿Cuánto puedes ahorrar al mes?',
+    options: [
+      {value: '2500-3000', label: 'De $2,500 a $3,000'},
+      {value: '3000-5000', label: 'De $3,000 a $5,000'},
+      {value: '5000-10000', label: 'De $5,000 a $10,000'},
+      {value: '10000+', label: 'Más de $10,000'},
     ],
     cols: 1,
     inputOptions: {required: true},
@@ -195,7 +205,7 @@ const formSteps = [
   {
     type: 'radio',
     name: 'liquidez-importancia',
-    title: '¿Qué tan importante es para ti que tu inversión tenga liquidez?',
+    title: '¿Qué tan importante es que tu inversión que esté disponible para retirar en cualquier momento?',
     options: [
       {value: 'muy-importante', label: 'Muy importante, lo necesito disponible'},
       {value: 'interesa-esperar', label: 'Me interesa, pero puedo esperar si vale la pena'},
@@ -263,7 +273,7 @@ const formSteps = [
       {
         type: 'text',
         name: 'name',
-        title: 'Tu nombre',
+        title: 'Tu nombre completo',
         inputOptions: {required: true},
       },
       {
@@ -342,14 +352,15 @@ export default function Survey() {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
     setSending(true);
     try {
       const _fbc = getCookie('_fbc');
       const _fbp = getCookie('_fbp');
-      data.whatsapp = '52' + data.phone.replace(/^(MX)?\+?(52)?\s?0?1?|\s|\(|\)|-|[a-zA-Z]/g, '');
+      const leadUtm = getCookie('lead_utm');
+      const utm = JSON.parse(leadUtm);
+      data.whatsapp = '521' + data.phone.replace(/^(MX)?\+?(52)?\s?0?1?|\s|\(|\)|-|[a-zA-Z]/g, '');
 
-      const payload = {...data, _fbc, _fbp};
+      const payload = {...data, ...utm, _fbc, _fbp};
 
       await fetch(info.surveyWebhook, {
         method: 'POST',
@@ -359,11 +370,11 @@ export default function Survey() {
         },
       });
 
-      await fbEvent('Lead', {phone: data.whatsapp});
+      await fbEvent('Lead', {phone: data.whatsapp, email: data.email});
 
-      if (info.surveyRedirect) {
+      if (info.schedulerLink) {
         const forwardLink = document.createElement('a');
-        forwardLink.href = `${info.surveyRedirect}?name=${data.name}&email=${data.email}&phone=${data.whatsapp}`;
+        forwardLink.href = `${info.schedulerLink}?name=${data.name}&email=${data.email}&phone=${data.whatsapp}`;
         forwardLink.target = '_blank';
         forwardLink.click();
       }
@@ -490,15 +501,15 @@ export default function Survey() {
               className="relative container !px-0 md:pb-0 flex flex-col flex-grow md:flex-grow-0 items-center pointer-events-auto touch-auto">
               <div className="survey-card">
                 <div className={`relative flex-grow`}>
-                  <div className="relative w-full my-8 pt-[60%] rounded-2xl overflow-hidden">
+                  <div className="relative w-full my-8 pt-[70%] rounded-2xl overflow-hidden">
                     <Image src={portrait} layout="fill" objectFit="cover" objectPosition="top"/>
                   </div>
                   <p className="ft-6 sans text-center font-bold">Deja me presento:</p>
                   <p className="ft-2 mt-4 text-center mb-12">
-                    Soy Luis Castañeda, asesor de Allianz® desde hace más de 8 años.
+                    Soy Luis Castañeda, asesor de Allianz® desde hace más de 8 años y me gustaría poder platicar contigo.
                   </p>
                   <p className="ft-2 mt-4 text-center mb-12">
-                    Me gustaría poder platicar contigo personalmente, ¿por qué no agendas una asesoría sin compromisos para solucionarte todas tus dudas?
+                    ¿Por qué no agendas una asesoría sin compromisos para solucionar todas tus dudas?
                   </p>
                 </div>
                 <div

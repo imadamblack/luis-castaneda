@@ -24,6 +24,7 @@ export default function StepRenderer({
   switch (step.type) {
     case 'text':
     case 'tel':
+    case 'number':
       return (
         <div className="flex-grow">
           {commonText}
@@ -31,7 +32,7 @@ export default function StepRenderer({
             {...register(step.name, step.inputOptions)}
             type={step.type}
             placeholder={step.placeholder}
-            onKeyDown={step.type === 'tel' ? restrictNumber : undefined}
+            onKeyDown={step.type !== 'text' ? restrictNumber : undefined}
             className={inputError === index ? '!border-brand-2 mt-12' : 'mt-12'}
           />
         </div>

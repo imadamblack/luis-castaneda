@@ -1,11 +1,11 @@
 @charset "UTF-8";
-@import url("https://use.typekit.net/bbm7agp.css");
+@import url("https://use.typekit.net/syc4wwd.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 html {
   font-size: 62.5%;
-  font-family: "Fira Sans", sans-serif;
+  font-family: neue-haas-grotesk-display, sans-serif;
 }
 
 @keyframes ft-11 {
@@ -252,26 +252,27 @@ html {
   font-display: swap;
 }
 label {
-  font-family: "Fira Sans", sans-serif;
+  font-family: neue-haas-grotesk-display, sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Fira Sans", sans-serif;
-  letter-spacing: normal; /* Equivalente a tracking-normal */
+  font-family: neue-haas-grotesk-display, sans-serif;
+  letter-spacing: 0.05rem;
   margin-block-start: 0;
 }
 
 h1, h2, h3 {
-  font-weight: 600; /* Equivalente a font-semibold */
+  font-weight: 600;
 }
 
 h4, h5, h6 {
-  font-weight: 700; /* Equivalente a font-bold */
+  font-weight: 700;
 }
 
 p, li {
-  font-family: "Fira Sans", sans-serif;
+  font-family: neue-haas-grotesk-display, sans-serif;
   margin-block-start: 0;
+  letter-spacing: 0.05rem;
 }
 
 a {
@@ -281,15 +282,15 @@ a {
 }
 
 .sans {
-  font-family: "Fira Sans", sans-serif;
+  font-family: neue-haas-grotesk-display, sans-serif;
 }
 
 .serif {
-  font-family: "Fira Sans", sans-serif;
+  font-family: neue-haas-grotesk-display, sans-serif;
 }
 
 .condensed {
-  font-family: "Fira Sans", sans-serif;
+  font-family: neue-haas-grotesk-display, sans-serif;
 }
 
 form {
@@ -324,7 +325,7 @@ input[type=radio] + label, input[type=checkbox] + label {
 }
 
 input[type=radio]:checked + label, input[type=checkbox]:checked + label {
-  @apply bg-gradient-to-br from-brand-1 to-indigo-600 text-white border-2;
+  @apply bg-gradient-to-br from-brand-1 to-indigo-600 text-white border;
 }
 
 select {

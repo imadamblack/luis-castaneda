@@ -24,8 +24,8 @@ export const info = {
     state: '',
   },
   optInWebhook: '',
-  surveyWebhook: '',
-  surveyRedirect: '',
+  surveyWebhook: 'https://hook.us1.make.com/br13rws8il9al3df3cx75bm5m5v2lo2y',
+  schedulerLink: 'https://luiscastanedaasesores.pipedrive.com/scheduler/Bp5o0zcE/asesoria-financiera-para-tu-retiro',
   privacyNotice: '/aviso-privacidad',
   termsConditions: '/aviso-privacidad',
 };

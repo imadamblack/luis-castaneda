@@ -8,15 +8,15 @@ export default function ThankYou() {
           ¡Gracias por registrarte!
         </h2>
         <p className="ft-4 text-center">
-          Muy pronto, uno de nuestros Diseñadores se pondrá en contacto contigo para darte más info sobre nuestras obras.
+          Muy pronto, uno de nuestros asesores se pondrá en contacto contigo para aclarar dudas sobre tu Plan para el Retiro.
         </p>
         <p className="text-center ft-2">
-          Si no se abrió nuestro calendario para agendar tu muestra de piezas
+          Si no se abrió nuestro calendario para agendar tu asesoría sin compromisos
         </p>
         <div className="flex flex-col items-center justify-center gap-10">
           <a
             className="button hover:scale-105 bg-brand-2 hover:bg-brand-3 ft-4 flex justify-center items-center "
-            href={info.surveyRedirect === '' ? `https://wa.me/${info.whatsapp.value}` : info.surveyRedirect}
+            href={info.schedulerLink === '' ? `https://wa.me/${info.whatsapp.value}` : info.schedulerLink}
             target="_blank"
           >
             <span className="material-icons">arrow_forward</span>Da click aquí

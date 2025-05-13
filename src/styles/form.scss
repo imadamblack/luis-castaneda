@@ -32,7 +32,7 @@ input[type=radio] + label, input[type=checkbox] + label {
 }
 
 input[type=radio]:checked + label, input[type=checkbox]:checked + label {
-  @apply bg-gradient-to-br from-brand-1 to-indigo-600 text-white border-2;
+  @apply bg-gradient-to-br from-brand-1 to-indigo-600 text-white border;
 }
 
 select {

@@ -1,4 +1,4 @@
-@import url("https://use.typekit.net/bbm7agp.css");
+@import url("https://use.typekit.net/syc4wwd.css");
 
 $titleLead: 1.1;
 $subtitleLead: 1.2;
@@ -6,7 +6,7 @@ $baseLead: 1.5;
 
 html {
   font-size: 62.5%;
-  font-family: "Fira Sans", sans-serif;
+  font-family: neue-haas-grotesk-display, sans-serif;
 }
 
 $fluid_steps: (
@@ -57,25 +57,26 @@ h5 { @extend .ft-2; }
 h6 { @extend .ft-1; }
 p { @extend .ft-0; }
 li { @extend .ft-0; }
-label { @extend .ft-0; font-family: "Fira Sans", sans-serif}
+label { @extend .ft-0; font-family: neue-haas-grotesk-display, sans-serif;}
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Fira Sans", sans-serif;
-  letter-spacing: normal; /* Equivalente a tracking-normal */
+  font-family: neue-haas-grotesk-display, sans-serif;
+  letter-spacing: 0.05rem;
   margin-block-start: 0;
 }
 
 h1, h2, h3 {
-  font-weight: 600; /* Equivalente a font-semibold */
+  font-weight: 600;
 }
 
 h4, h5, h6 {
-  font-weight: 700; /* Equivalente a font-bold */
+  font-weight: 700;
 }
 
 p, li {
-  font-family: "Fira Sans", sans-serif;
+  font-family: neue-haas-grotesk-display, sans-serif;
   margin-block-start: 0;
+  letter-spacing: 0.05rem;
 }
 
 a {
@@ -85,11 +86,11 @@ a {
 }
 
 .sans {
-  font-family: "Fira Sans", sans-serif;
+  font-family: neue-haas-grotesk-display, sans-serif;
 }
 .serif {
-  font-family: "Fira Sans", sans-serif;
+  font-family: neue-haas-grotesk-display, sans-serif;
 }
 .condensed {
-  font-family: "Fira Sans", sans-serif;
+  font-family: neue-haas-grotesk-display, sans-serif;
 }
