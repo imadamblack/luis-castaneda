@@ -98,7 +98,7 @@ export default function OptInForm({lastClick = ''}) {
         }</button>
 
         <div className="mt-4">
-          <p className="-ft-3 text-center text-white">Al dar clic aceptas nuestra&nbsp;
+          <p className="-ft-3 text-center">Al dar clic aceptas nuestra&nbsp;
             <Link href={info.privacyNotice}>política de privacidad</Link>
           </p>
         </div>
