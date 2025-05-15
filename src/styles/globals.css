@@ -360,9 +360,14 @@ select[disabled] {
 }
 
 .survey-card {
-  @apply top-20 flex flex-col flex-grow w-full max-w-[56rem] p-8 rounded-b-2xl overflow-scroll;
+  @apply top-20 flex flex-col w-full max-w-[56rem] p-8 rounded-b-2xl overflow-scroll;
 }
 
+@supports (height: 100dvh) {
+  .safe-screen {
+    height: 100dvh;
+  }
+}
 html,
 body {
   padding: 0;
@@ -373,7 +378,7 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
-  min-height: 100vh;
+  min-height: 100dvh;
 }
 
 main {
