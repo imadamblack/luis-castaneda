@@ -21,7 +21,7 @@ import { stepTracker } from '../utils/stepTracker';
 const formSteps = [
   {
     type: 'checkpoint',
-    name: 'checkpoint',
+    name: 'checkpoint-1',
     render: () => (
       <div className={`relative flex-grow`}>
         <p className="ft-6 sans text-center font-bold">El mejor momento para pensar en tu retiro fue ayer, hoy es tu
@@ -102,7 +102,7 @@ const formSteps = [
   },
   {
     type: 'checkpoint',
-    name: 'checkpoint',
+    name: 'checkpoint-2',
     render: () => (
       <div className={`relative flex-grow`}>
         <p className="ft-6 sans text-center font-bold">Seguir ahorrando en tu cuenta del banco es como esconder dinero
@@ -178,7 +178,7 @@ const formSteps = [
   },
   {
     type: 'checkpoint',
-    name: 'checkpoint',
+    name: 'checkpoint-3',
     render: () => (
       <div className={`relative flex-grow`}>
         <p className="ft-6 sans text-center font-bold">Tu retiro administrado por una de las aseguradoras más grandes
@@ -243,7 +243,7 @@ const formSteps = [
   },
   {
     type: 'checkpoint',
-    name: 'checkpoint',
+    name: 'checkpoint-4',
     autoAdvance: true,
     render: () => (
       <div className="container flex flex-col justify-center items-center z-10">
@@ -308,7 +308,6 @@ export default function Survey() {
   } = methods;
 
   const router = useRouter();
-  const stepTrackerRef = useRef(null);
 
   useEffect(() => {
     if (showIntro) {
@@ -334,20 +333,11 @@ export default function Survey() {
   },[formStep]);
 
   useEffect(() => {
-    stepTrackerRef.current = stepTracker({
-      stepsLength: formSteps.length,
-      callback: (stepIndex) => {
-        const step = formSteps[stepIndex];
-        if (step?.name) {
-          fbEvent(`StepReached: ${stepIndex}`);
-        }
-      },
-    });
-  }, []);
+    const step = formSteps[formStep];
 
-  useEffect(() => {
-    if (stepTrackerRef.current) {
-      stepTrackerRef.current(formStep);
+    if (step?.type === 'checkpoint') {
+      fbEvent(step?.name);
+      console.log(step?.name);
     }
   }, [formStep]);
 
