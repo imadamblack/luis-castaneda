@@ -1,5 +1,3 @@
-import { getCookie } from 'cookies-next';
-
 export default function fbEvent(
   eventName,
   userData = {
@@ -7,8 +5,24 @@ export default function fbEvent(
     email: '',
     externalID: ''
   },
-  eventID = Date.now()
+  eventID = Date.now(),
+  clientData = {}
 ) {
+  const standardEvents = ['PageView', 'Purchase', 'Lead', 'InitiateCheckout'];
+  const isStandard = standardEvents.includes(eventName);
+
+  try {
+    if (typeof fbq !== 'undefined') {
+      if (isStandard) {
+        fbq('track', eventName, clientData);
+      } else {
+        fbq('trackCustom', eventName, clientData);
+      }
+    }
+  } catch (err) {
+    console.error('fbq error:', err);
+  }
+
   const payload = JSON.stringify({
     eventName,
     eventID,
@@ -17,17 +31,14 @@ export default function fbEvent(
       em: userData.email,
       externalID: userData.externalID
     },
-  })
-
-  fbq('track', eventName, {fbc: getCookie('_fbc')}, {eventID});
+    clientData
+  });
 
   return fetch(`/api/fb-event`, {
     method: 'POST',
     body: payload,
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-  })
-    .then((res) => res.json())
-    .catch(err => console.log(err))
+  }).then(res => res.json()).catch(err => console.log(err));
 }

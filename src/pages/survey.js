@@ -1,6 +1,6 @@
 'use client';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { setCookie, getCookie } from 'cookies-next';
 import { info } from '../../info';
@@ -15,6 +15,7 @@ import i01 from '../../public/survey/01.png';
 import i02 from '../../public/survey/02.png';
 import i03 from '../../public/survey/03.jpg';
 import portrait from '../../public/survey/portrait.png';
+import { stepTracker } from '../utils/stepTracker';
 
 
 const formSteps = [
@@ -307,6 +308,7 @@ export default function Survey() {
   } = methods;
 
   const router = useRouter();
+  const stepTrackerRef = useRef(null);
 
   useEffect(() => {
     if (showIntro) {
@@ -316,6 +318,7 @@ export default function Survey() {
 
       return () => clearTimeout(timer);
     }
+    window.scrollTo(0, 0);
   }, [showIntro]);
 
   useEffect(() => {
@@ -329,6 +332,24 @@ export default function Survey() {
       return () => clearTimeout(timer);
     }
   },[formStep]);
+
+  useEffect(() => {
+    stepTrackerRef.current = stepTracker({
+      stepsLength: formSteps.length,
+      callback: (stepIndex) => {
+        const step = formSteps[stepIndex];
+        if (step?.name) {
+          fbEvent(`StepReached: ${stepIndex}`);
+        }
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    if (stepTrackerRef.current) {
+      stepTrackerRef.current(formStep);
+    }
+  }, [formStep]);
 
   const lastInputIndex = formSteps.reduce((lastIndex, step, i) => {
     return step.type !== 'checkpoint' ? i : lastIndex;
