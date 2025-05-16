@@ -382,7 +382,7 @@ export default function Survey() {
         },
       });
 
-      await fbEvent('Lead', {phone: data.whatsapp, email: data.email});
+      // await fbEvent('Lead', {phone: data.whatsapp, email: data.email});
 
       // if (info.schedulerLink) {
       //   const forwardLink = document.createElement('a');
