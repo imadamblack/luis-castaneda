@@ -3,13 +3,14 @@ import { info } from '../../../info';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { getCookie, setCookie } from 'cookies-next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { restrictNumber, emailRegExp } from '../../utils/formValidators';
 import fbEvent from '../../services/fbEvents';
 import { Select } from './formAtoms';
 
 export default function OptInForm({lastClick = ''}) {
   const [sending, setSending] = useState(false);
+  const [utm, setUtm] = useState({});
   const router = useRouter();
   const methods = useForm({mode: 'all'});
   const {
@@ -17,6 +18,11 @@ export default function OptInForm({lastClick = ''}) {
     handleSubmit,
     formState: {errors},
   } = methods;
+
+  useEffect(() => {
+    const leadUtm = getCookie('lead_utm');
+    setUtm(JSON.parse(leadUtm));
+  }, []);
 
   const onSubmit = (data) => {
     setSending(true);
@@ -26,7 +32,9 @@ export default function OptInForm({lastClick = ''}) {
 
     const _fbc = getCookie('_fbc');
     const _fbp = getCookie('_fbp');
-    const payload = {...data, _fbc, _fbp};
+    const payload = {...data, ...utm, _fbc, _fbp};
+
+    console.log('opt in', payload);
 
     fetch(info.optInWebhook, {
       method: 'POST',
@@ -36,13 +44,13 @@ export default function OptInForm({lastClick = ''}) {
       },
     }).then((result) => result.json())
       // Send FB Event
-      .then(({id}) => {
+      .then(({sheetRow, crmId}) => {
         fbEvent(
           'Lead',
-          {email: data.email, phone: data.phone, externalID: id},
+          {email: data.email, phone: data.phone, externalID: crmId},
         );
-        setCookie('lead', {...data, id});
-        router.push(`/survey?id=${id}`);
+        setCookie('lead', {...data, sheetRow, crmId});
+        router.push(`/survey?id=${crmId}`);
       })
       .catch(() => {
         fbEvent(

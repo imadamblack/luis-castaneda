@@ -2,19 +2,38 @@ import Head from 'next/head';
 import { info } from '../../../info';
 import Header from './header';
 import Footer from './footer';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router'
 
 export default function Layout({children}) {
-  useEffect(() => {
-    const mainHeader = document.getElementsByTagName('header')[0];
-    document.querySelector('html').style.scrollPaddingTop = mainHeader?.offsetHeight + 'px' || 0;
-    document.querySelector('main').style.paddingTop = mainHeader?.offsetHeight + 'px' || 0;
-    document.querySelector('main').style.scrollMarginTop = mainHeader?.offsetHeight + 'px' || 0;
-  }, []);
   const router = useRouter()
-  const pathname = router.pathname
-  console.log(pathname);
+  const [header, setHeader] = useState(true);
+
+  useEffect(() => {
+    setHeader(router.pathname !== '/survey');
+  }, [router.pathname]);
+
+  console.log('H',header);
+
+  useEffect(() => {
+    // Espera a que el DOM actualice antes de medir
+    const timeout = setTimeout(() => {
+      const mainHeader = document.getElementsByTagName('header')[0];
+      if (header && mainHeader) {
+        const height = mainHeader.offsetHeight + 'px';
+        document.querySelector('html').style.scrollPaddingTop = height;
+        document.querySelector('main').style.paddingTop = height;
+        document.querySelector('main').style.scrollMarginTop = height;
+      } else {
+        // Restablecer estilos si no hay header
+        document.querySelector('html').style.scrollPaddingTop = '0px';
+        document.querySelector('main').style.paddingTop = '0px';
+        document.querySelector('main').style.scrollMarginTop = '0px';
+      }
+    }, 0); // espera al próximo ciclo del event loop
+
+    return () => clearTimeout(timeout);
+  }, [router.pathname, header]);
 
   return (
     <>
@@ -22,11 +41,11 @@ export default function Layout({children}) {
         <title>{info.companyName} | {info.description}</title>
         <meta name="description" content={info.description}/>
       </Head>
-      {pathname !== '/survey' && <Header/>}
+      {header && <Header/>}
 
       <main className={`flex-grow`}>{children}</main>
 
-      {pathname !== '/survey' && <Footer/>}
+      {header && <Footer/>}
     </>
   );
 }

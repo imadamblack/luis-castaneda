@@ -296,10 +296,11 @@ const setFormSteps = ({fullName, email, phone}) => ([
 export default function Survey() {
   const [showIntro, setShowIntro] = useState(true);
   const [showOutro, setShowOutro] = useState(false);
-  const [formStep, setFormStep] = useState(18);
+  const [formStep, setFormStep] = useState(0);
   const [inputError, setInputError] = useState(null);
   const [sending, setSending] = useState(false);
   const [lead, setLead] = useState({fullName: '', email: '', phone: ''});
+  const [utm, setUtm] = useState({})
   const methods = useForm({mode: 'all'});
   const {
     register,
@@ -311,7 +312,9 @@ export default function Survey() {
 
   useEffect(() => {
     const leadCookie = getCookie('lead')
-    setLead(JSON.parse(leadCookie))
+    const leadUtm = getCookie('lead_utm');
+    setLead(JSON.parse(leadCookie));
+    setUtm(JSON.parse(leadUtm));
   }, []);
   useEffect(() => {
     if (showIntro) {
@@ -368,11 +371,11 @@ export default function Survey() {
     try {
       const _fbc = getCookie('_fbc');
       const _fbp = getCookie('_fbp');
-      const leadUtm = getCookie('lead_utm');
-      const utm = JSON.parse(leadUtm);
       data.whatsapp = '521' + data.phone.replace(/^(MX)?\+?(52)?\s?0?1?|\s|\(|\)|-|[a-zA-Z]/g, '');
 
-      const payload = {...data, ...utm, _fbc, _fbp};
+      const payload = {...data, ...lead, ...utm, _fbc, _fbp};
+
+      console.log('survey payload',payload);
 
       await fetch(info.surveyWebhook, {
         method: 'POST',
