@@ -18,7 +18,7 @@ import portrait from '../../public/survey/portrait.png';
 import { stepTracker } from '../utils/stepTracker';
 
 
-const formSteps = [
+const setFormSteps = ({fullName, email, phone}) => ([
   {
     type: 'checkpoint',
     name: 'checkpoint-1',
@@ -275,30 +275,31 @@ const formSteps = [
         type: 'text',
         name: 'name',
         title: 'Tu nombre completo',
-        inputOptions: {required: true},
+        inputOptions: {value: fullName, required: true},
       },
       {
         type: 'email',
         name: 'email',
         title: 'Tu correo',
-        inputOptions: {required: true},
+        inputOptions: {value: email, required: true},
       },
       {
         type: 'tel',
         name: 'phone',
         title: 'Tu WhatsApp',
-        inputOptions: {required: true, maxLength: 10, minLength: 10},
+        inputOptions: {value: phone, required: true, maxLength: 10, minLength: 10},
       },
     ],
   },
-];
+]);
 
 export default function Survey() {
   const [showIntro, setShowIntro] = useState(true);
   const [showOutro, setShowOutro] = useState(false);
-  const [formStep, setFormStep] = useState(0);
+  const [formStep, setFormStep] = useState(18);
   const [inputError, setInputError] = useState(null);
   const [sending, setSending] = useState(false);
+  const [lead, setLead] = useState({fullName: '', email: '', phone: ''});
   const methods = useForm({mode: 'all'});
   const {
     register,
@@ -306,9 +307,12 @@ export default function Survey() {
     formState: {errors},
     watch,
   } = methods;
-
   const router = useRouter();
 
+  useEffect(() => {
+    const leadCookie = getCookie('lead')
+    setLead(JSON.parse(leadCookie))
+  }, []);
   useEffect(() => {
     if (showIntro) {
       const timer = setTimeout(() => {
@@ -319,7 +323,6 @@ export default function Survey() {
     }
     window.scrollTo(0, 0);
   }, [showIntro]);
-
   useEffect(() => {
     const current = formSteps[formStep];
 
@@ -331,7 +334,6 @@ export default function Survey() {
       return () => clearTimeout(timer);
     }
   },[formStep]);
-
   useEffect(() => {
     const step = formSteps[formStep];
 
@@ -341,10 +343,10 @@ export default function Survey() {
     }
   }, [formStep]);
 
+  const formSteps = setFormSteps({fullName: lead.fullName, email: lead.email, phone: lead.phone});
   const lastInputIndex = formSteps.reduce((lastIndex, step, i) => {
     return step.type !== 'checkpoint' ? i : lastIndex;
   }, 0);
-
   const handleNext = async () => {
     const currentStep = formSteps[formStep];
     if (currentStep.type === 'checkpoint') {
@@ -361,7 +363,6 @@ export default function Survey() {
     window.scrollTo(0, 0);
     setFormStep((prev) => Math.min(prev + 1, formSteps.length - 1));
   };
-
   const onSubmit = async (data) => {
     setSending(true);
     try {
