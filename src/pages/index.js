@@ -315,7 +315,7 @@ export default function Home() {
         <div className="container">
           <div className="w-full md:w-1/2 mx-auto">
             <h2 className="text-brand-1">
-              Agenda la simulación de tu retiro gratuita y deja de decir ‘luego lo veo’.
+              Agenda la simulación gratuita de tu retiro y deja de decir ‘luego lo veo’.
             </h2>
             <p className="ft-2 mt-8 sm:text-left">
               En este zoom veremos:

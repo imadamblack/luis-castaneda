@@ -18,6 +18,41 @@ import portrait from '../../public/survey/portrait.png';
 import { stepTracker } from '../utils/stepTracker';
 
 
+const Intro = () => <motion.div
+  key="intro"
+  initial={{opacity: 0}}
+  animate={{opacity: 1}}
+  exit={{opacity: 0}}
+  transition={{duration: 0.5}}
+  className="relative flex-grow flex flex-col items-center justify-center px-4 pt-[40vh] pb-12"
+>
+  <Image src={i00} layout="fill" objectFit="cover"/>
+  <div className="absolute inset-0 bg-gradient-to-br from-brand-1 to-indigo-500 opacity-25"/>
+
+  <div className="container flex flex-col justify-center items-center z-10">
+    <p className="ft-4 font-semibold mt-12 text-center text-white">Tu ahorro, tu ritmo.</p>
+    <h1 className="ft-8 mb-12 text-center md:w-2/3 text-white">Descubre como puedes tener el retiro de tus
+      sueños</h1>
+
+    <div className="w-full max-w-[50rem] h-12 p-2 mt-20 mb-4 bg-gray-200 rounded-full overflow-hidden">
+      <motion.div
+        initial={{width: '0%'}}
+        animate={{width: '100%'}}
+        transition={{duration: 3, ease: 'easeInOut'}}
+        className="h-full bg-gradient-to-br from-blue-800 to-indigo-500 rounded-2xl"
+      />
+    </div>
+    <p className="-ft-1 flex items-center text-center text-gray-100">
+      Cargando el test
+      <span
+        className="-ft-1 material-symbols-outlined animate-spin ml-4">progress_activity</span>
+    </p>
+  </div>
+  <div className="relative mt-auto inset-x-0 w-[12rem] pt-[6rem] md:pt-[6rem]">
+    <Image src={allianz} layout="fill" className="object-contain grayscale-50 "/>
+  </div>
+</motion.div>
+
 const setFormSteps = ({fullName, email, phone}) => ([
   {
     type: 'checkpoint',
@@ -313,8 +348,8 @@ export default function Survey() {
   useEffect(() => {
     const leadCookie = getCookie('lead')
     const leadUtm = getCookie('lead_utm');
-    setLead(JSON.parse(leadCookie));
-    setUtm(JSON.parse(leadUtm));
+    leadCookie && setLead(JSON.parse(leadCookie));
+    leadUtm && setUtm(JSON.parse(leadUtm));
   }, []);
   useEffect(() => {
     if (showIntro) {
@@ -336,7 +371,7 @@ export default function Survey() {
 
       return () => clearTimeout(timer);
     }
-  },[formStep]);
+  }, [formStep]);
   useEffect(() => {
     const step = formSteps[formStep];
 
@@ -375,7 +410,7 @@ export default function Survey() {
 
       const payload = {...data, ...lead, ...utm, _fbc, _fbp};
 
-      console.log('survey payload',payload);
+      console.log('survey payload', payload);
 
       await fetch(info.surveyWebhook, {
         method: 'POST',
@@ -407,40 +442,7 @@ export default function Survey() {
       <div className="relative flex flex-col flex-grow bg-gradient-to-t from-blue-50 to-white">
         <AnimatePresence mode="wait">
           {showIntro && (
-            <motion.div
-              key="intro"
-              initial={{opacity: 0}}
-              animate={{opacity: 1}}
-              exit={{opacity: 0}}
-              transition={{duration: 0.5}}
-              className="relative flex-grow flex flex-col items-center justify-center px-4 pt-[40vh] pb-12"
-            >
-              <Image src={i00} layout="fill" objectFit="cover"/>
-              <div className="absolute inset-0 bg-gradient-to-br from-brand-1 to-indigo-500 opacity-25"/>
-
-              <div className="container flex flex-col justify-center items-center z-10">
-                <p className="ft-4 font-semibold mt-12 text-center text-white">Tu ahorro, tu ritmo.</p>
-                <h1 className="ft-8 mb-12 text-center md:w-2/3 text-white">Descubre como puedes tener el retiro de tus
-                  sueños</h1>
-
-                <div className="w-full max-w-[50rem] h-12 p-2 mt-20 mb-4 bg-gray-200 rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{width: '0%'}}
-                    animate={{width: '100%'}}
-                    transition={{duration: 5, ease: 'easeInOut'}}
-                    className="h-full bg-gradient-to-br from-blue-800 to-indigo-500 rounded-2xl"
-                  />
-                </div>
-                <p className="-ft-1 flex items-center text-center text-gray-100">
-                  Cargando el test
-                  <span
-                    className="-ft-1 material-symbols-outlined animate-spin ml-4">progress_activity</span>
-                </p>
-              </div>
-              <div className="relative mt-auto inset-x-0 w-[12rem] pt-[6rem] md:pt-[6rem]">
-                <Image src={allianz} layout="fill" className="object-contain grayscale-50 "/>
-              </div>
-            </motion.div>
+            <Intro/>
           )}
           {!showIntro && !showOutro && (
             <motion.div
@@ -521,7 +523,8 @@ export default function Survey() {
                   </div>
                   <p className="ft-6 sans text-center font-bold">Deja me presento:</p>
                   <p className="ft-2 mt-4 text-center mb-12">
-                    Soy Luis Castañeda, asesor de Allianz® desde hace más de 8 años y me gustaría poder platicar contigo.
+                    Soy Luis Castañeda, asesor de Allianz® desde hace más de 8 años y me gustaría poder platicar
+                    contigo.
                   </p>
                   <p className="ft-2 mt-4 text-center mb-12">
                     ¿Por qué no agendas una asesoría sin compromisos para solucionar todas tus dudas?
