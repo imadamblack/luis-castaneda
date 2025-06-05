@@ -1,6 +1,6 @@
 'use client';
 import { useForm, FormProvider } from 'react-hook-form';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { setCookie, getCookie } from 'cookies-next';
 import { info } from '../../info';
@@ -15,8 +15,6 @@ import i01 from '../../public/survey/01.png';
 import i02 from '../../public/survey/02.png';
 import i03 from '../../public/survey/03.jpg';
 import portrait from '../../public/survey/portrait.png';
-import { stepTracker } from '../utils/stepTracker';
-
 
 const Intro = () => <motion.div
   key="intro"
@@ -38,7 +36,7 @@ const Intro = () => <motion.div
       <motion.div
         initial={{width: '0%'}}
         animate={{width: '100%'}}
-        transition={{duration: 3, ease: 'easeInOut'}}
+        transition={{duration: 5, ease: 'easeInOut'}}
         className="h-full bg-gradient-to-br from-blue-800 to-indigo-500 rounded-2xl"
       />
     </div>
@@ -53,7 +51,43 @@ const Intro = () => <motion.div
   </div>
 </motion.div>
 
-const setFormSteps = ({fullName, email, phone}) => ([
+const Outro =  () => <div
+  className="relative container !px-0 md:pb-0 flex flex-col flex-grow md:flex-grow-0 items-center pointer-events-auto touch-auto">
+  <div className="survey-card">
+    <div className={`relative flex-grow`}>
+      <div className="relative w-full my-8 pt-[70%] rounded-2xl overflow-hidden">
+        <Image src={portrait} layout="fill" objectFit="cover" objectPosition="top"/>
+      </div>
+      <p className="ft-6 sans text-center font-bold">Deja me presento:</p>
+      <p className="ft-2 mt-4 text-center mb-12">
+        Soy Luis Castañeda, asesor de Allianz® desde hace más de 8 años y me gustaría poder platicar
+        contigo.
+      </p>
+      <p className="ft-2 mt-4 text-center mb-12">
+        ¿Por qué no agendas una asesoría sin compromisos para solucionar todas tus dudas?
+      </p>
+    </div>
+    <div
+      className={`fixed p-8 bottom-0 inset-x-0 grid grid-cols-1 md:grid-cols-2 gap-8 w-full mt-auto bg-white border-t-2 border-gray-200 z-50`}>
+      <a
+        href="/cotizador"
+        className="button-secondary mt-auto !w-full"
+      >
+        Continuar a mi plan
+      </a>
+      <a
+        href={info.schedulerLink}
+        target="_blank"
+        className="button mt-auto !w-full"
+        onMouseUp={() => router.push('/')}
+      >
+        Agendar mi asesoría gratuita
+      </a>
+    </div>
+  </div>
+</div>;
+
+const setPastFormSteps = ({fullName, email, phone}) => ([
   {
     type: 'checkpoint',
     name: 'checkpoint-1',
@@ -328,6 +362,115 @@ const setFormSteps = ({fullName, email, phone}) => ([
   },
 ]);
 
+const setFormSteps = ({fullName, email, phone}) => ([
+  {
+    type: 'checkpoint',
+    name: 'checkpoint-1',
+    render: () => (
+      <div className={`relative flex-grow`}>
+        <p className="ft-6 sans text-center font-bold">El mejor momento para pensar en tu retiro fue ayer, hoy es tu
+          segunda mejor opción.</p>
+        <div className="relative w-full my-8 pt-[80%] rounded-2xl overflow-hidden">
+          <Image src={i01} layout="fill" objectFit="cover"/>
+        </div>
+        <p className="ft-2 mt-4 text-center mb-12">Comienza a hacer que tu dinero trabaje por ti.</p>
+      </div>
+    ),
+  },
+  {
+    type: 'text',
+    name: 'edad',
+    title: '¿Cuántos años tienes?',
+    inputOptions: {required: true},
+  },
+  {
+    type: 'number',
+    name: 'ahorro',
+    title: '¿Cuánto quieres ahorrar al mes?',
+    placeholder: 'Mínimo $2,500 en múltiplos de 500',
+    inputOptions: {required: true, min: {value: 2500, message: "El monto mínimo es de $2,500"}},
+  },
+  {
+    type: 'radio',
+    name: 'nivel-consciencia',
+    title: '¿Cuál de estas frases te describe mejor?',
+    options: [
+      {
+        value: 'inconsciente',
+        label: '“Me preocupa mi retiro, pero la verdad ni sé por dónde empezar.”'
+      },
+      {
+        value: 'problema',
+        label: '“Sí quiero ahorrar, pero nunca me alcanza o no soy constante.”'
+      },
+      {
+        value: 'solucion',
+        label: '“Estoy buscando alguna opción segura donde pueda invertir sin tanto riesgo.”'
+      },
+      {
+        value: 'producto',
+        label: '“Ya he probado algunas opciones, pero no me han dado buenos resultados.”'
+      },
+      {
+        value: 'compra',
+        label: '“Ya tengo una meta clara y solo me falta elegir con quién hacerlo.”'
+      },
+    ],
+    cols: 1,
+    inputOptions: {required: true},
+  },
+  {
+    type: 'checkpoint',
+    name: 'checkpoint-4',
+    autoAdvance: true,
+    render: () => (
+      <div className="container flex flex-col justify-center items-center z-10">
+        <p className="ft-4 font-semibold mt-12 text-center">Dame unos segundos</p>
+        <h1 className="ft-8 mb-12 text-center md:w-2/3">Estamos analizando tus respuestas</h1>
+
+        <div className="w-full max-w-[50rem] h-12 p-2 mt-20 mb-4 bg-gray-200 rounded-full overflow-hidden">
+          <motion.div
+            initial={{width: '0%'}}
+            animate={{width: '100%'}}
+            transition={{duration: 5, ease: 'easeInOut'}}
+            className="h-full bg-gradient-to-br from-blue-800 to-indigo-500 rounded-2xl"
+          />
+        </div>
+        <p className="-ft-1 flex items-center text-center">
+          Analizando
+          <span
+            className="-ft-1 material-symbols-outlined animate-spin ml-4">progress_activity</span>
+        </p>
+      </div>
+    ),
+  },
+  {
+    type: 'opt-in',
+    title: 'Ok, tengo una opción para tu plan de ahorro',
+    description: 'Compárteme tus datos para compartirte tu plan por correo o WhatsApp.',
+    fields: [
+      {
+        type: 'text',
+        name: 'name',
+        title: 'Tu nombre completo',
+        inputOptions: {value: fullName, required: true},
+      },
+      {
+        type: 'email',
+        name: 'email',
+        title: 'Tu correo',
+        inputOptions: {value: email, required: true},
+      },
+      {
+        type: 'tel',
+        name: 'phone',
+        title: 'Tu WhatsApp',
+        inputOptions: {value: phone, required: true, maxLength: 10, minLength: 10},
+      },
+    ],
+  },
+]);
+
 export default function Survey() {
   const [showIntro, setShowIntro] = useState(true);
   const [showOutro, setShowOutro] = useState(false);
@@ -410,9 +553,7 @@ export default function Survey() {
 
       const payload = {...data, ...lead, ...utm, _fbc, _fbp};
 
-      console.log('survey payload', payload);
-
-      await fetch(info.surveyWebhook, {
+      const res = await fetch(info.surveyWebhook, {
         method: 'POST',
         body: JSON.stringify(payload),
         headers: {
@@ -420,14 +561,7 @@ export default function Survey() {
         },
       });
 
-      // await fbEvent('Lead', {phone: data.whatsapp, email: data.email});
-
-      // if (info.schedulerLink) {
-      //   const forwardLink = document.createElement('a');
-      //   forwardLink.href = `${info.schedulerLink}?name=${data.name}&email=${data.email}&phone=${data.whatsapp}`;
-      //   forwardLink.target = '_blank';
-      //   forwardLink.click();
-      // }
+      setCookie('lead', {...data, id: res.id});
 
       setShowOutro(true);
     } catch (err) {
@@ -476,6 +610,7 @@ export default function Survey() {
                             index={formStep}
                             currentStep={formStep}
                             inputError={inputError}
+                            errorMessage={errors[formSteps[formStep]?.name]?.message}
                             register={register}
                           />
                         </motion.div>
@@ -513,37 +648,7 @@ export default function Survey() {
               </div>
             </motion.div>
           )}
-          {showOutro && (
-            <div
-              className="relative container !px-0 md:pb-0 flex flex-col flex-grow md:flex-grow-0 items-center pointer-events-auto touch-auto">
-              <div className="survey-card">
-                <div className={`relative flex-grow`}>
-                  <div className="relative w-full my-8 pt-[70%] rounded-2xl overflow-hidden">
-                    <Image src={portrait} layout="fill" objectFit="cover" objectPosition="top"/>
-                  </div>
-                  <p className="ft-6 sans text-center font-bold">Deja me presento:</p>
-                  <p className="ft-2 mt-4 text-center mb-12">
-                    Soy Luis Castañeda, asesor de Allianz® desde hace más de 8 años y me gustaría poder platicar
-                    contigo.
-                  </p>
-                  <p className="ft-2 mt-4 text-center mb-12">
-                    ¿Por qué no agendas una asesoría sin compromisos para solucionar todas tus dudas?
-                  </p>
-                </div>
-                <div
-                  className={`fixed p-8 bottom-0 inset-x-0 grid grid-cols-1 gap-8 w-full mt-auto bg-white border-t-2 border-gray-200 z-50`}>
-                  <a
-                    href={info.schedulerLink}
-                    target="_blank"
-                    className="button mt-auto !w-full"
-                    onMouseUp={() => router.push('/')}
-                  >
-                    Agendar mi asesoría
-                  </a>
-                </div>
-              </div>
-            </div>
-          )}
+          {showOutro && <Outro/>}
         </AnimatePresence>
       </div>
     </>

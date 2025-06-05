@@ -299,10 +299,10 @@ form {
 
 input, select, textarea {
   font-size: 1.6rem;
-  @apply flex border border-gray-500 rounded-lg px-6 py-4 w-full;
+  @apply flex border border-gray-500 rounded-lg px-6 py-4 w-full tracking-wider;
 }
 input::placeholder, select::placeholder, textarea::placeholder {
-  @apply text-gray-500;
+  @apply text-gray-400;
 }
 input::-ms-input-placeholder, select::-ms-input-placeholder, textarea::-ms-input-placeholder {
   @apply text-gray-500;

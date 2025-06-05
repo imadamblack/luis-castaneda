@@ -8,9 +8,11 @@ export default function StepRenderer({
   index,
   currentStep,
   inputError,
+  errorMessage,
   register,
 }) {
   if (index !== currentStep) return null;
+  console.log(errorMessage?.message);
 
   const commonText = (
     <div className="mb-8">
@@ -35,6 +37,7 @@ export default function StepRenderer({
             onKeyDown={step.type !== 'text' ? restrictNumber : undefined}
             className={inputError === index ? '!border-brand-2 mt-12' : 'mt-12'}
           />
+          <p className="-ft-2 mt-4 text-brand-3 font-medium">{errorMessage}</p>
         </div>
       );
 
