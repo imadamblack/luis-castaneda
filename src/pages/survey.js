@@ -49,44 +49,7 @@ const Intro = () => <motion.div
   <div className="relative mt-auto inset-x-0 w-[12rem] pt-[6rem] md:pt-[6rem]">
     <Image src={allianz} layout="fill" className="object-contain grayscale-50 "/>
   </div>
-</motion.div>
-
-const Outro =  () => <div
-  className="relative container !px-0 md:pb-0 flex flex-col flex-grow md:flex-grow-0 items-center pointer-events-auto touch-auto">
-  <div className="survey-card">
-    <div className={`relative flex-grow`}>
-      <div className="relative w-full my-8 pt-[70%] rounded-2xl overflow-hidden">
-        <Image src={portrait} layout="fill" objectFit="cover" objectPosition="top"/>
-      </div>
-      <p className="ft-6 sans text-center font-bold">Deja me presento:</p>
-      <p className="ft-2 mt-4 text-center mb-12">
-        Soy Luis Castañeda, asesor de Allianz® desde hace más de 8 años y me gustaría poder platicar
-        contigo.
-      </p>
-      <p className="ft-2 mt-4 text-center mb-12">
-        ¿Por qué no agendas una asesoría sin compromisos para solucionar todas tus dudas?
-      </p>
-    </div>
-    <div
-      className={`fixed p-8 bottom-0 inset-x-0 grid grid-cols-1 md:grid-cols-2 gap-8 w-full mt-auto bg-white border-t-2 border-gray-200 z-50`}>
-      <a
-        href="/cotizador"
-        className="button-secondary mt-auto !w-full"
-      >
-        Continuar a mi plan
-      </a>
-      <a
-        href={info.schedulerLink}
-        target="_blank"
-        className="button mt-auto !w-full"
-        onMouseUp={() => router.push('/')}
-      >
-        Agendar mi asesoría gratuita
-      </a>
-    </div>
-  </div>
-</div>;
-
+</motion.div>;
 const setPastFormSteps = ({fullName, email, phone}) => ([
   {
     type: 'checkpoint',
@@ -388,7 +351,7 @@ const setFormSteps = ({fullName, email, phone}) => ([
     name: 'ahorro',
     title: '¿Cuánto quieres ahorrar al mes?',
     placeholder: 'Mínimo $2,500 en múltiplos de 500',
-    inputOptions: {required: true, min: {value: 2500, message: "El monto mínimo es de $2,500"}},
+    inputOptions: {required: true, min: {value: 2500, message: 'El monto mínimo es de $2,500'}},
   },
   {
     type: 'radio',
@@ -397,23 +360,23 @@ const setFormSteps = ({fullName, email, phone}) => ([
     options: [
       {
         value: '01-inconsciente',
-        label: '“Me preocupa mi retiro, pero la verdad ni sé por dónde empezar.”'
+        label: '“Me preocupa mi retiro, pero la verdad ni sé por dónde empezar.”',
       },
       {
         value: '02-problema',
-        label: '“Sí quiero ahorrar, pero nunca me alcanza o no soy constante.”'
+        label: '“Sí quiero ahorrar, pero nunca me alcanza o no soy constante.”',
       },
       {
         value: '03-solucion',
-        label: '“Estoy buscando alguna opción segura donde pueda invertir sin tanto riesgo.”'
+        label: '“Estoy buscando alguna opción segura donde pueda invertir sin tanto riesgo.”',
       },
       {
         value: '04-producto',
-        label: '“Ya he probado algunas opciones, pero no me han dado buenos resultados.”'
+        label: '“Ya he probado algunas opciones, pero no me han dado buenos resultados.”',
       },
       {
         value: '05-compra',
-        label: '“Ya tengo una meta clara y solo me falta elegir con quién hacerlo.”'
+        label: '“Ya tengo una meta clara y solo me falta elegir con quién hacerlo.”',
       },
     ],
     cols: 1,
@@ -451,7 +414,7 @@ const setFormSteps = ({fullName, email, phone}) => ([
     fields: [
       {
         type: 'text',
-        name: 'name',
+        name: 'fullName',
         title: 'Tu nombre completo',
         inputOptions: {value: fullName, required: true},
       },
@@ -471,14 +434,13 @@ const setFormSteps = ({fullName, email, phone}) => ([
   },
 ]);
 
-export default function Survey() {
+export default function Survey({lead, utm}) {
   const [showIntro, setShowIntro] = useState(true);
   const [showOutro, setShowOutro] = useState(false);
   const [formStep, setFormStep] = useState(0);
   const [inputError, setInputError] = useState(null);
   const [sending, setSending] = useState(false);
-  const [lead, setLead] = useState({fullName: '', email: '', phone: ''});
-  const [utm, setUtm] = useState({})
+
   const methods = useForm({mode: 'all'});
   const {
     register,
@@ -488,12 +450,6 @@ export default function Survey() {
   } = methods;
   const router = useRouter();
 
-  useEffect(() => {
-    const leadCookie = getCookie('lead')
-    const leadUtm = getCookie('lead_utm');
-    leadCookie && setLead(JSON.parse(leadCookie));
-    leadUtm && setUtm(JSON.parse(leadUtm));
-  }, []);
   useEffect(() => {
     if (showIntro) {
       const timer = setTimeout(() => {
@@ -525,6 +481,7 @@ export default function Survey() {
   }, [formStep]);
 
   const formSteps = setFormSteps({fullName: lead.fullName, email: lead.email, phone: lead.phone});
+
   const lastInputIndex = formSteps.reduce((lastIndex, step, i) => {
     return step.type !== 'checkpoint' ? i : lastIndex;
   }, 0);
@@ -547,11 +504,9 @@ export default function Survey() {
   const onSubmit = async (data) => {
     setSending(true);
     try {
-      const _fbc = getCookie('_fbc');
-      const _fbp = getCookie('_fbp');
       data.whatsapp = '521' + data.phone.replace(/^(MX)?\+?(52)?\s?0?1?|\s|\(|\)|-|[a-zA-Z]/g, '');
 
-      const payload = {...data, ...lead, ...utm, _fbc, _fbp};
+      const payload = {...lead, ...data, ...utm};
 
       const res = await fetch(info.surveyWebhook, {
         method: 'POST',
@@ -648,9 +603,90 @@ export default function Survey() {
               </div>
             </motion.div>
           )}
-          {showOutro && <Outro/>}
+          {showOutro &&
+            <div
+              className="relative container !px-0 md:pb-0 flex flex-col flex-grow md:flex-grow-0 items-center pointer-events-auto touch-auto">
+              <div className="survey-card">
+                <div className={`relative flex-grow`}>
+                  <div className="relative w-full my-8 pt-[70%] rounded-2xl overflow-hidden">
+                    <Image src={portrait} layout="fill" objectFit="cover" objectPosition="top"/>
+                  </div>
+                  <p className="ft-6 sans text-center font-bold">Deja me presento:</p>
+                  <p className="ft-2 mt-4 text-center mb-12">
+                    Soy Luis Castañeda, asesor de Allianz® desde hace más de 8 años y me gustaría poder platicar
+                    contigo.
+                  </p>
+                  <p className="ft-2 mt-4 text-center mb-12">
+                    ¿Por qué no agendas una asesoría sin compromisos para solucionar todas tus dudas?
+                  </p>
+                </div>
+                <div
+                  className={`fixed p-8 bottom-0 inset-x-0 grid grid-cols-1 md:grid-cols-2 gap-8 w-full mt-auto bg-white border-t-2 border-gray-200 z-50`}>
+                  <a
+                    href="/cotizador"
+                    className="button-secondary mt-auto !w-full"
+                  >
+                    Continuar a mi plan
+                  </a>
+                  <a
+                    href={info.schedulerLink}
+                    target="_blank"
+                    className="button mt-auto !w-full"
+                    onMouseUp={() => router.push('/cotizador')}
+                  >
+                    Agendar mi asesoría gratuita
+                  </a>
+                </div>
+              </div>
+            </div>
+          }
         </AnimatePresence>
       </div>
     </>
   );
+}
+
+export async function getServerSideProps(ctx) {
+  const {req, res} = ctx;
+  const leadCookie = getCookie('lead', {req, res}) || '{}';
+  const leadUtmCookie = getCookie('lead_utm', {req, res}) || '{}';
+  const _fbc = getCookie('_fbc') || '';
+  const _fbp = getCookie('_fbp') || '';
+
+  const lead = JSON.parse(leadCookie);
+  const leadUtm = JSON.parse(leadUtmCookie);
+
+  if (!lead || lead === 'null' || Object.keys(lead).length === 0) {
+    return {
+      props: {
+        lead: {
+          fullName: '',
+          email: '',
+          phone: '',
+          whatsapp: '',
+          sheetRow: '',
+          crmId: '',
+          _fbc,
+          _fbp,
+        },
+        utm: leadUtm,
+      },
+    };
+  }
+
+  return {
+    props: {
+      lead: {
+        fullName: lead.fullName,
+        email: lead.email,
+        phone: lead.phone,
+        whatsapp: lead.whatsapp,
+        sheetRow: lead.sheetRow || '',
+        crmId: lead.crmId || '',
+        _fbc,
+        _fbp,
+      },
+      utm: leadUtm,
+    },
+  };
 }

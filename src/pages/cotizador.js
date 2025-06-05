@@ -2,32 +2,18 @@ import { info } from '../../info'
 import { getCookie } from 'cookies-next';
 import Image from 'next/image';
 import portrait from '../../public/survey/portrait.png';
-import { useEffect, useState } from 'react';
 
-export default function Cotizador() {
-  const [leadInfo, setLeadInfo] = useState(null);
+export default function Cotizador({lead}) {
 
-  useEffect(() => {
-    const lead = getCookie('lead');
-    if (typeof lead === 'string') {
-      try {
-        setLeadInfo(JSON.parse(lead));
-      } catch (e) {
-        console.error('Cookie malformada:', e);
-      }
-    }
-  }, []);
-
-  if (!leadInfo) return null; // o spinner / mensaje de carga
-
-  const { name, edad, ahorro } = leadInfo;
-  const firstName = name.split(' ')[0];
+  const { fullName, edad, ahorro } = lead;
+  const firstName = fullName.split(' ')[0];
   const monthlyPayment = parseInt(ahorro);
   const savingYears = 65 - parseInt(edad);
 
   const formatoMXN = new Intl.NumberFormat('es-MX', {
     style: 'currency',
     currency: 'MXN',
+    maximumFractionDigits: 0,
   });
 
   function fvAnual(payment) {
@@ -45,7 +31,7 @@ export default function Cotizador() {
         className="relative container !px-0 md:pb-0 flex flex-col flex-grow md:flex-grow-0 items-center pointer-events-auto touch-auto">
         <div className="survey-card border-b pb-12">
           <div className="w-full py-12">
-            <p className="ft-3"><span className="font-semibold">{firstName}</span>, te dejo 3 opciones de cuanto tendrías a tus 65 años:</p>
+            <p className="ft-3"><span className="font-semibold">{firstName}</span>, te dejo 3 opciones de cuanto tendrías a tus <nobr>65 años</nobr>:</p>
           </div>
 
           <div className="w-full mb-8 grid grid-cols-2 border border-blue-500 rounded-2xl overflow-hidden">
@@ -125,4 +111,39 @@ export default function Cotizador() {
 
     </div>
   );
+}
+
+export async function getServerSideProps(ctx) {
+  const {req, res} = ctx;
+  const leadCookie = getCookie('lead', {req, res}) || '{}';
+  const _fbc = getCookie('_fbc') || '';
+  const _fbp = getCookie('_fbp') || '';
+
+  const lead = JSON.parse(leadCookie);
+
+  if (!lead || lead === 'null' || Object.keys(lead).length === 0) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/survey',
+      },
+    };
+  }
+
+  return {
+    props: {
+      lead: {
+        fullName: lead.fullName,
+        email: lead.email,
+        phone: lead.phone,
+        whatsapp: lead.whatsapp,
+        ahorro: lead.ahorro,
+        edad: lead.edad,
+        sheetRow: lead.sheetRow || '',
+        crmId: lead.crmId || '',
+        _fbc,
+        _fbp,
+      },
+    },
+  };
 }
