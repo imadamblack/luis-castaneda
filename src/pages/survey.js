@@ -15,6 +15,7 @@ import i01 from '../../public/survey/01.png';
 import i02 from '../../public/survey/02.png';
 import i03 from '../../public/survey/03.jpg';
 import portrait from '../../public/survey/portrait.png';
+import SavingsChart from '../components/chart';
 
 const Intro = () => <motion.div
   key="intro"
@@ -603,15 +604,27 @@ export default function Survey({lead, utm}) {
               </div>
             </motion.div>
           )}
-          {showOutro &&
+          {showOutro && watch('edad') && watch('ahorro') &&
             <div
               className="relative container !px-0 md:pb-0 flex flex-col flex-grow md:flex-grow-0 items-center pointer-events-auto touch-auto">
               <div className="survey-card">
                 <div className={`relative flex-grow`}>
-                  <div className="relative w-full my-8 pt-[70%] rounded-2xl overflow-hidden">
-                    <Image src={portrait} layout="fill" objectFit="cover" objectPosition="top"/>
+                  <p className="ft-6 sans text-center font-bold">Mira {lead.fullName.split(' ')[0]}, esta es una proyección real de tu ahorro:</p>
+
+                  <div
+                    className="w-full p-8 my-12 rounded-2xl overflow-hidden bg-gradient-to-br border border-blue-500">
+                    <SavingsChart age={watch('edad')} monthly={watch('ahorro')}/>
+                    <div className="flex justify-between mt-8">
+                      <p className="-ft-1 flex">
+                        <span className="material-icons ft-0 mr-4" style={{color: '#999999'}}>timeline</span>
+                        Tu ahorro
+                      </p>
+                      <p className="-ft-1 flex">
+                        <span className="material-icons ft-0 mr-4" style={{color: '#4ade80'}}>timeline</span>
+                        Tu ahorro final
+                      </p>
+                    </div>
                   </div>
-                  <p className="ft-6 sans text-center font-bold">Deja me presento:</p>
                   <p className="ft-2 mt-4 text-center mb-12">
                     Soy Luis Castañeda, asesor de Allianz® desde hace más de 8 años y me gustaría poder platicar
                     contigo.
@@ -634,7 +647,7 @@ export default function Survey({lead, utm}) {
                     className="button mt-auto !w-full"
                     onMouseUp={() => router.push('/cotizador')}
                   >
-                    Agendar mi asesoría gratuita
+                  Agendar mi asesoría gratuita
                   </a>
                 </div>
               </div>

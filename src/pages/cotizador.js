@@ -1,6 +1,7 @@
 import { info } from '../../info'
 import { getCookie } from 'cookies-next';
 import Image from 'next/image';
+import SavingsChart from '../components/chart';
 import portrait from '../../public/survey/portrait.png';
 
 export default function Cotizador({lead}) {
@@ -31,13 +32,16 @@ export default function Cotizador({lead}) {
         className="relative container !px-0 md:pb-0 flex flex-col flex-grow md:flex-grow-0 items-center pointer-events-auto touch-auto">
         <div className="survey-card border-b pb-12">
           <div className="w-full py-12">
-            <p className="ft-3"><span className="font-semibold">{firstName}</span>, te dejo 3 opciones de cuanto tendrías a tus <nobr>65 años</nobr>:</p>
+            <p className="ft-3"><span className="font-semibold">{firstName}</span>, te dejo 3 opciones de cuanto
+              tendrías a tus <nobr>65 años</nobr>:
+            </p>
           </div>
 
           <div className="w-full mb-8 grid grid-cols-2 border border-blue-500 rounded-2xl overflow-hidden">
             <div className="p-8 border-r">
               <p className="-ft-1 font-semibold">Ahorro mensual:</p>
-              <p className="ft-4 font-bold mt-4">{formatoMXN.format(monthlyPayment)} <span className="ft-1">mxn</span></p>
+              <p className="ft-4 font-bold mt-4">{formatoMXN.format(monthlyPayment)} <span className="ft-1">mxn</span>
+              </p>
             </div>
             <div className="flex flex-col p-8 bg-blue-50">
               <p className="-ft-1 font-semibold">Tu ahorro proyectado:</p>
@@ -51,7 +55,8 @@ export default function Cotizador({lead}) {
           <div className="w-full mb-8 grid grid-cols-2 border border-blue-500 rounded-2xl overflow-hidden">
             <div className="p-8 border-r">
               <p className="-ft-1 font-semibold">Ahorro mensual:</p>
-              <p className="ft-4 font-bold mt-4">{formatoMXN.format(monthlyPayment + 500)} <span className="ft-1">mxn</span></p>
+              <p className="ft-4 font-bold mt-4">{formatoMXN.format(monthlyPayment + 500)} <span
+                className="ft-1">mxn</span></p>
             </div>
             <div className="flex flex-col p-8 bg-blue-50">
               <p className="-ft-1 font-semibold">Tu ahorro proyectado:</p>
@@ -65,7 +70,8 @@ export default function Cotizador({lead}) {
           <div className="w-full mb-8 grid grid-cols-2 border border-blue-500 rounded-2xl overflow-hidden">
             <div className="p-8 border-r">
               <p className="-ft-1 font-semibold">Ahorro mensual:</p>
-              <p className="ft-4 font-bold mt-4">{formatoMXN.format(monthlyPayment + 1000)} <span className="ft-1">mxn</span></p>
+              <p className="ft-4 font-bold mt-4">{formatoMXN.format(monthlyPayment + 1000)} <span
+                className="ft-1">mxn</span></p>
             </div>
             <div className="flex flex-col p-8 bg-blue-50">
               <p className="-ft-1 font-semibold">Tu ahorro proyectado:</p>
@@ -75,6 +81,7 @@ export default function Cotizador({lead}) {
                  className="ft-0 mt-4 underline tracking-wider">Platiquemos →</a>
             </div>
           </div>
+
           <p className="ft-2 mb-8">
             Vamos platicando para desglosar el plan de ahorro que más te convenga.
           </p>
@@ -85,6 +92,29 @@ export default function Cotizador({lead}) {
           >
             Programa una asesoría gratuita
           </a>
+
+          <div className="w-full p-8 my-12 rounded-2xl overflow-hidden bg-gradient-to-br border border-blue-500">
+            <SavingsChart age={edad} monthly={ahorro}/>
+            <div className="flex justify-between mt-8">
+              <p className="-ft-1 flex">
+                <span className="material-icons ft-0 mr-4" style={{color: '#999999'}}>timeline</span>
+                Tu ahorro
+              </p>
+              <p className="-ft-1 flex">
+                <span className="material-icons ft-0 mr-4" style={{color: '#4ade80'}}>timeline</span>
+                Tu ahorro final
+              </p>
+            </div>
+          </div>
+
+          <a
+            href={info.schedulerLink}
+            target="_blank"
+            className="button ft-3 mt-auto !w-full"
+          >
+            Programa una asesoría gratuita
+          </a>
+
         </div>
 
         <div className={`survey-card`}>
