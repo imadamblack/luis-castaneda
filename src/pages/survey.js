@@ -396,23 +396,23 @@ const setFormSteps = ({fullName, email, phone}) => ([
     title: '¿Cuál de estas frases te describe mejor?',
     options: [
       {
-        value: 'inconsciente',
+        value: '01-inconsciente',
         label: '“Me preocupa mi retiro, pero la verdad ni sé por dónde empezar.”'
       },
       {
-        value: 'problema',
+        value: '02-problema',
         label: '“Sí quiero ahorrar, pero nunca me alcanza o no soy constante.”'
       },
       {
-        value: 'solucion',
+        value: '03-solucion',
         label: '“Estoy buscando alguna opción segura donde pueda invertir sin tanto riesgo.”'
       },
       {
-        value: 'producto',
+        value: '04-producto',
         label: '“Ya he probado algunas opciones, pero no me han dado buenos resultados.”'
       },
       {
-        value: 'compra',
+        value: '05-compra',
         label: '“Ya tengo una meta clara y solo me falta elegir con quién hacerlo.”'
       },
     ],
@@ -421,7 +421,7 @@ const setFormSteps = ({fullName, email, phone}) => ([
   },
   {
     type: 'checkpoint',
-    name: 'checkpoint-4',
+    name: 'checkpoint-2',
     autoAdvance: true,
     render: () => (
       <div className="container flex flex-col justify-center items-center z-10">
