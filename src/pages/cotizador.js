@@ -2,10 +2,26 @@ import { info } from '../../info'
 import { getCookie } from 'cookies-next';
 import Image from 'next/image';
 import portrait from '../../public/survey/portrait.png';
+import { useEffect, useState } from 'react';
+
 export default function Cotizador() {
-  const lead = getCookie('lead');
-  const {name, edad, ahorro} = JSON.parse(lead);
-  const firstName = name.split(' ')[0]
+  const [leadInfo, setLeadInfo] = useState(null);
+
+  useEffect(() => {
+    const lead = getCookie('lead');
+    if (typeof lead === 'string') {
+      try {
+        setLeadInfo(JSON.parse(lead));
+      } catch (e) {
+        console.error('Cookie malformada:', e);
+      }
+    }
+  }, []);
+
+  if (!leadInfo) return null; // o spinner / mensaje de carga
+
+  const { name, edad, ahorro } = leadInfo;
+  const firstName = name.split(' ')[0];
   const monthlyPayment = parseInt(ahorro);
   const savingYears = 65 - parseInt(edad);
 
