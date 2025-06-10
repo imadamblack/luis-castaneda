@@ -517,6 +517,11 @@ export default function Survey({lead, utm}) {
         },
       });
 
+      fbEvent(
+        'Lead',
+        {email: data.email, phone: data.phone, externalID: res.id},
+      );
+
       setCookie('lead', {...data, id: res.id});
 
       setShowOutro(true);
