@@ -668,8 +668,8 @@ export async function getServerSideProps(ctx) {
   const {req, res} = ctx;
   const leadCookie = getCookie('lead', {req, res}) || '{}';
   const leadUtmCookie = getCookie('lead_utm', {req, res}) || '{}';
-  const _fbc = getCookie('_fbc') || '';
-  const _fbp = getCookie('_fbp') || '';
+  const _fbc = getCookie('_fbc',{req, res}) || '';
+  const _fbp = getCookie('_fbp',{req, res}) || '';
 
   const lead = JSON.parse(leadCookie);
   const leadUtm = JSON.parse(leadUtmCookie);
