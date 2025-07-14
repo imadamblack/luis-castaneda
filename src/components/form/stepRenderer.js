@@ -7,12 +7,11 @@ export default function StepRenderer({
   step,
   index,
   currentStep,
-  inputError,
-  errorMessage,
+  errors,
   register,
 }) {
   if (index !== currentStep) return null;
-  console.log(errorMessage?.message);
+  console.log(step.name, errors[step.name]?.message);
 
   const commonText = (
     <div className="mb-8">
@@ -35,9 +34,9 @@ export default function StepRenderer({
             type={step.type}
             placeholder={step.placeholder}
             onKeyDown={step.type !== 'text' ? restrictNumber : undefined}
-            className={inputError === index ? '!border-brand-2 mt-12' : 'mt-12'}
+            className={errors[step.name]?.message ? '!border-brand-2 mt-12' : 'mt-12'}
           />
-          <p className="-ft-2 mt-4 text-brand-3 font-medium">{errorMessage}</p>
+          <p className="-ft-2 mt-4 text-brand-3 font-medium">{errors[step.name]?.message}</p>
         </div>
       );
 
@@ -49,7 +48,7 @@ export default function StepRenderer({
             {...register(step.name, step.inputOptions)}
             placeholder={step.placeholder}
             rows={step.cols || 4}
-            className={inputError === index ? '!border-brand-2 mt-12' : 'mt-12'}
+            className={errors[step.name]?.message ? '!border-brand-2 mt-12' : 'mt-12'}
           />
         </div>
       );
@@ -64,7 +63,7 @@ export default function StepRenderer({
             placeholder={step.placeholder}
             options={step.options}
             optCols={step.cols}
-            className={inputError === index ? '!border-brand-2' : undefined}
+            className={errors[step.name]?.message ? '!border-brand-2' : undefined}
           />
         </div>
       );
@@ -79,7 +78,7 @@ export default function StepRenderer({
             placeholder={step.placeholder}
             options={step.options}
             optCols={step.cols}
-            className={inputError === index ? '!border-brand-2' : undefined}
+            className={errors[step.name]?.message ? '!border-brand-2' : undefined}
           />
         </div>
       );
@@ -93,7 +92,7 @@ export default function StepRenderer({
             inputOptions={step.inputOptions}
             placeholder={step.placeholder}
             options={step.options}
-            className={inputError === index ? '!border-brand-2' : undefined}
+            className={errors[step.name]?.message ? '!border-brand-2' : undefined}
           />
         </div>
       );
@@ -113,8 +112,9 @@ export default function StepRenderer({
                 type={field.type}
                 {...register(field.name, field.inputOptions)}
                 placeholder={field.title}
-                className={inputError === index ? '!border-brand-2' : ''}
+                className={errors[field.name]?.message ? '!border-brand-2' : ''}
               />
+              <p className="-ft-2 text-brand-3 font-medium">{errors[field.name]?.message}</p>
             </div>
           ))}
           <div className="mt-4">

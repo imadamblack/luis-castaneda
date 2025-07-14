@@ -345,14 +345,14 @@ const setFormSteps = ({fullName, email, phone}) => ([
     type: 'text',
     name: 'edad',
     title: '¿Cuántos años tienes?',
-    inputOptions: {required: true},
+    inputOptions: {required: 'Compárteme tu edad'},
   },
   {
     type: 'number',
     name: 'ahorro',
     title: '¿Cuánto quieres ahorrar al mes?',
     placeholder: 'Mínimo $2,500 en múltiplos de 500',
-    inputOptions: {required: true, min: {value: 2500, message: 'El monto mínimo es de $2,500'}},
+    inputOptions: {required: 'Cuánto puedes ahorrar al mes?', min: {value: 2500, message: 'El monto mínimo es de $2,500'}},
   },
   {
     type: 'radio',
@@ -417,19 +417,31 @@ const setFormSteps = ({fullName, email, phone}) => ([
         type: 'text',
         name: 'fullName',
         title: 'Tu nombre completo',
-        inputOptions: {value: fullName, required: true},
+        inputOptions: {value: fullName, required: 'Cómo te llamas?'},
       },
       {
         type: 'email',
         name: 'email',
         title: 'Tu correo',
-        inputOptions: {value: email, required: true},
+        inputOptions: {
+          value: email,
+          required: 'Compártenos un correo que si uses',
+          pattern: {
+            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            message: 'Compártenos un correo válido',
+          },
+        },
       },
       {
         type: 'tel',
         name: 'phone',
         title: 'Tu WhatsApp',
-        inputOptions: {value: phone, required: true, maxLength: 10, minLength: 10},
+        inputOptions: {
+          value: phone,
+          required: 'Cuál es tu WhatsApp?',
+          maxLength: {value: 10, message: 'Tu tel a 10 digitos'},
+          minLength: {value: 10, message: 'Tu tel a 10 digitos'},
+        },
       },
     ],
   },
@@ -570,6 +582,7 @@ export default function Survey({lead, utm}) {
                             step={formSteps[formStep]}
                             index={formStep}
                             currentStep={formStep}
+                            errors={errors}
                             inputError={inputError}
                             errorMessage={errors[formSteps[formStep]?.name]?.message}
                             register={register}
@@ -614,7 +627,8 @@ export default function Survey({lead, utm}) {
               className="relative container !px-0 md:pb-0 flex flex-col flex-grow md:flex-grow-0 items-center pointer-events-auto touch-auto">
               <div className="survey-card">
                 <div className={`relative flex-grow`}>
-                  <p className="ft-6 sans text-center font-bold">Mira {lead.fullName.split(' ')[0]}, esta es una proyección real de tu ahorro:</p>
+                  <p className="ft-6 sans text-center font-bold">Mira {lead.fullName.split(' ')[0]}, esta es una
+                    proyección real de tu ahorro:</p>
 
                   <div
                     className="w-full p-8 my-12 rounded-2xl overflow-hidden bg-gradient-to-br border border-blue-500">
@@ -652,7 +666,7 @@ export default function Survey({lead, utm}) {
                     className="button mt-auto !w-full"
                     onMouseUp={() => router.push('/cotizador')}
                   >
-                  Agendar mi asesoría gratuita
+                    Agendar mi asesoría gratuita
                   </a>
                 </div>
               </div>
@@ -668,8 +682,8 @@ export async function getServerSideProps(ctx) {
   const {req, res} = ctx;
   const leadCookie = getCookie('lead', {req, res}) || '{}';
   const leadUtmCookie = getCookie('lead_utm', {req, res}) || '{}';
-  const _fbc = getCookie('_fbc',{req, res}) || '';
-  const _fbp = getCookie('_fbp',{req, res}) || '';
+  const _fbc = getCookie('_fbc', {req, res}) || '';
+  const _fbp = getCookie('_fbp', {req, res}) || '';
 
   const lead = JSON.parse(leadCookie);
   const leadUtm = JSON.parse(leadUtmCookie);
