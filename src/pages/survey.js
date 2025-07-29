@@ -37,7 +37,7 @@ const Intro = () => <motion.div
       <motion.div
         initial={{width: '0%'}}
         animate={{width: '100%'}}
-        transition={{duration: 5, ease: 'easeInOut'}}
+        transition={{duration: 3, ease: 'easeInOut'}}
         className="h-full bg-gradient-to-br from-blue-800 to-indigo-500 rounded-2xl"
       />
     </div>
@@ -327,20 +327,20 @@ const setPastFormSteps = ({fullName, email, phone}) => ([
 ]);
 
 const setFormSteps = ({fullName, email, phone}) => ([
-  {
-    type: 'checkpoint',
-    name: 'checkpoint-1',
-    render: () => (
-      <div className={`relative flex-grow`}>
-        <p className="ft-6 sans text-center font-bold">El mejor momento para pensar en tu retiro fue ayer, hoy es tu
-          segunda mejor opción.</p>
-        <div className="relative w-full my-8 pt-[80%] rounded-2xl overflow-hidden">
-          <Image src={i01} layout="fill" objectFit="cover"/>
-        </div>
-        <p className="ft-2 mt-4 text-center mb-12">Comienza a hacer que tu dinero trabaje por ti.</p>
-      </div>
-    ),
-  },
+  // {
+  //   type: 'checkpoint',
+  //   name: 'checkpoint-1',
+  //   render: () => (
+  //     <div className={`relative flex-grow`}>
+  //       <p className="ft-6 sans text-center font-bold">El mejor momento para pensar en tu retiro fue ayer, hoy es tu
+  //         segunda mejor opción.</p>
+  //       <div className="relative w-full my-8 pt-[80%] rounded-2xl overflow-hidden">
+  //         <Image src={i01} layout="fill" objectFit="cover"/>
+  //       </div>
+  //       <p className="ft-2 mt-4 text-center mb-12">Comienza a hacer que tu dinero trabaje por ti.</p>
+  //     </div>
+  //   ),
+  // },
   {
     type: 'text',
     name: 'edad',
@@ -467,7 +467,7 @@ export default function Survey({lead, utm}) {
     if (showIntro) {
       const timer = setTimeout(() => {
         setShowIntro(false);
-      }, 5000);
+      }, 3000);
 
       return () => clearTimeout(timer);
     }
